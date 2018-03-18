@@ -12,6 +12,10 @@ public class Jjinbbang : MonoBehaviour
     public float moveSpeed;
     public bool gameOver;
 
+    public LayerMask layerMask;
+    Ray ray;
+    RaycastHit2D hit;
+
     void Initialize()
     {
         moveSpeed = 4f;
@@ -32,7 +36,7 @@ public class Jjinbbang : MonoBehaviour
 
     void Move()
     {
-        if (!gameOver)
+        if (!gameOver && !RayCheck(/*방향*/))
         {
             float moveX = Input.GetAxis("Horizontal");
             transform.Translate(Vector2.right * moveX * moveSpeed * Time.deltaTime);
@@ -56,5 +60,18 @@ public class Jjinbbang : MonoBehaviour
                 _anim.sprite.flipX = true;
             }
         }
+    }
+
+    bool RayCheck(Vector2 JBdirection)
+    {
+        if (Physics2D.Raycast(gameObject.transform.position, JBdirection, 4f, layerMask))
+        {
+            Debug.Log(hit.collider.gameObject.name);
+
+            hit.transform.GetComponent<MeshRenderer>().material.color = Color.red;
+            return true;
+        }
+        else
+            return false;
     }
 }
