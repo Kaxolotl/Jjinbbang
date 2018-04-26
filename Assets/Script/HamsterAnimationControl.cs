@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JBAnimationControl : MonoBehaviour {
+public class HamsterAnimationControl : MonoBehaviour {
 
     public Animator animator;
     public SpriteRenderer sprite;

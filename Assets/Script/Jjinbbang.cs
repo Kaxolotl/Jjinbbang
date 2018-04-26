@@ -6,9 +6,9 @@ public class Jjinbbang : MonoBehaviour
 {
     [SerializeField]
     public Transform _skin;
-    public JBAnimationControl AnimControl { get { return _anim; } }
+    public HamsterAnimationControl AnimControl { get { return _anim; } }
 
-    JBAnimationControl _anim;
+    HamsterAnimationControl _anim;
 
     public float moveSpeed;
     public bool gameOver;
@@ -31,7 +31,7 @@ public class Jjinbbang : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
-        _anim = _skin.GetComponent<JBAnimationControl>();
+        _anim = _skin.GetComponent<HamsterAnimationControl>();
         _skin = transform.Find("skin");
         Initialize();
     }
@@ -43,7 +43,7 @@ public class Jjinbbang : MonoBehaviour
 
     void Move()
     {
-
+        // Vector2 GetAxisRaw로 입력 받음 
         moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         // 물리의 속도값으로 이동 애니메이션 실행여부 결정
