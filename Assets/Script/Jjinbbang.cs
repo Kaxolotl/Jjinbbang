@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Jjinbbang : MonoBehaviour
 {
+    const float MOVE_RANGE = 12.5f;
+
     [SerializeField]
     public Transform _skin;
     public HamsterAnimationControl AnimControl { get { return _anim; } }
@@ -16,15 +18,12 @@ public class Jjinbbang : MonoBehaviour
     public LayerMask layerMask;
     public Rigidbody2D rigid;
     public Vector2 moveInput;
-
-    Vector2 moveVelocity;
-    Ray ray;
+    
     RaycastHit2D hit;
 
     void Initialize()
     {
-        moveSpeed = 3f;
-        moveVelocity = Vector3.zero;
+        moveSpeed = 2f;
         gameOver = false;
     }
 
@@ -63,18 +62,7 @@ public class Jjinbbang : MonoBehaviour
 
         // 이동
         rigid.velocity = moveInput * moveSpeed;
-    }
-
-    bool RayCheck(Vector2 JBdirection)
-    {
-        if (Physics2D.Raycast(gameObject.transform.position, JBdirection, 4f, layerMask))
-        {
-            Debug.Log(hit.collider.gameObject.name);
-
-            hit.transform.GetComponent<MeshRenderer>().material.color = Color.red;
-            return true;
-        }
-        else
-            return false;
+        transform.position = new Vector2(Mathf.Clamp(transform.position.x, -MOVE_RANGE, MOVE_RANGE), 
+                                         Mathf.Clamp(transform.position.y, -MOVE_RANGE, MOVE_RANGE));
     }
 }

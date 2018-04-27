@@ -15,7 +15,6 @@ public class Hamster : MonoBehaviour
     Vector2 jjinbbangPos;
     Vector2 relativePos;
 
-    CircleCollider2D _circleCol;
     float _moveSpeed;
     bool _byRelativePos;
     bool _byJjinbbang;
@@ -30,7 +29,6 @@ public class Hamster : MonoBehaviour
     {
         jjinbbang = GameObject.Find("Jjinbbang").GetComponent<Jjinbbang>();
         _rigid = GetComponent<Rigidbody2D>();
-        _circleCol = GetComponent<CircleCollider2D>();
         _anim = _skin.GetComponent<HamsterAnimationControl>();
         _skin = transform.Find("skin");
 
