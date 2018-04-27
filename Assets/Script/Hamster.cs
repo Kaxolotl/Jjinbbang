@@ -23,6 +23,7 @@ public class Hamster : MonoBehaviour
     {
         _moveSpeed = Random.Range(2.5f, 3f);
         _byJjinbbang = false;
+        _rigid.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     void Start()
@@ -36,21 +37,31 @@ public class Hamster : MonoBehaviour
         InvokeRepeating("Move", 0, 0.1f);
     }
 
-    private void Update()
+    void JjinbbangActivity()
     {
+        // GameManager 찐빵이 상호작용 bool 켜져있다면
+        if (GameManager.Instance.getHamster == true)
+        {
+            // Freeze 해제하고 회전만 막아둠
+            _rigid.constraints = RigidbodyConstraints2D.None;
+            _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+            // GameManager 찐빵이 상호작용 bool 끔
+            GameManager.Instance.getHamster = false;
+        }
     }
 
     void Move()
     {
+        JjinbbangActivity();
+
         // 찐빵이 범위 밖이면 
         if (!_byJjinbbang)
-        {        
+        {
             // 플레이어와의 벡터 구함
             jjinbbangPos = jjinbbang.transform.position - transform.position;
             // 목표는 그 벡터에 랜덤 값을 더한 것
             relativePos = new Vector2(jjinbbangPos.x + Random.Range(-1, 1), jjinbbangPos.y + Random.Range(-1, 1));
-
-            if(_rigid.velocity.x <= 3 && _rigid.velocity.y <= 3)
+            // 이동
             _rigid.velocity = relativePos.normalized * _moveSpeed;
         }
 
