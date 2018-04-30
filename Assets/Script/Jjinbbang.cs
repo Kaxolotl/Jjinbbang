@@ -6,8 +6,9 @@ public class Jjinbbang : MonoBehaviour
 {
     const float MOVE_RANGE = 12.5f;
 
-    [SerializeField]
-    public Transform _skin;
+    [SerializeField] Transform _skin;
+    [SerializeField] GameObject _jjinbbangActivity;
+
     public HamsterAnimationControl AnimControl { get { return _anim; } }
 
     HamsterAnimationControl _anim;
@@ -16,8 +17,6 @@ public class Jjinbbang : MonoBehaviour
     
     Rigidbody2D _rigid;
     Vector2 _moveInput;
-
-    bool _canGotcha;
 
     void Initialize()
     {
@@ -66,30 +65,18 @@ public class Jjinbbang : MonoBehaviour
 
     void JjinbbangActivity()
     {
-        // 스페이스바로 상호작용
+        // 스페이스바 상호작용
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // 햄스터갓챠 가능한가?
-            if (_canGotcha)
-            {
-                GameManager.Instance.getHamster = true;
-            }
+            StartCoroutine(Activity());
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    IEnumerator Activity()
     {
-        if (other.tag.Equals("Hamster"))
-        {
-            _canGotcha = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.tag.Equals("Hamster"))
-        {
-            _canGotcha = false;
-        }
+        //찐빵주변의 상호작용콜라이더 0.1초 생성
+        _jjinbbangActivity.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        _jjinbbangActivity.gameObject.SetActive(false);
     }
 }

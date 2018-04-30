@@ -5,8 +5,8 @@ using UnityEngine;
 public class Hamster : MonoBehaviour
 {
     [SerializeField]
-    public Transform _skin;
-    public HamsterAnimationControl AnimControl { get { return _anim; } }
+    Transform _skin;
+    HamsterAnimationControl AnimControl { get { return _anim; } }
 
     HamsterAnimationControl _anim;
 
@@ -36,24 +36,8 @@ public class Hamster : MonoBehaviour
         Initialize();
         InvokeRepeating("Move", 0, 0.1f);
     }
-
-    void JjinbbangActivity()
-    {
-        // GameManager 찐빵이 상호작용 bool 켜져있다면
-        if (GameManager.Instance.getHamster == true)
-        {
-            // Freeze 해제하고 회전만 막아둠
-            _rigid.constraints = RigidbodyConstraints2D.None;
-            _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
-            // GameManager 찐빵이 상호작용 bool 끔
-            GameManager.Instance.getHamster = false;
-        }
-    }
-
     void Move()
     {
-        JjinbbangActivity();
-
         // 찐빵이 범위 밖이면 
         if (!_byJjinbbang)
         {
@@ -93,6 +77,20 @@ public class Hamster : MonoBehaviour
         {
             _byJjinbbang = true;
         }
+
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag.Equals("JjinbbangActivity"))
+        {
+            // 찐빵상호작용콜라이더에 닿으면(Space bar 누르면) Freeze해제
+            _rigid.constraints = RigidbodyConstraints2D.None;
+            _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+            // 찐빵에게 합류하는 상호작용 코루틴
+            StartCoroutine(BeFriend());
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -101,5 +99,14 @@ public class Hamster : MonoBehaviour
         {
             _byJjinbbang = false;
         }
+    }
+
+
+    IEnumerator BeFriend()
+    {
+        // messageWindow 3초 생성, 내용 수정방법 생각해야됨
+        UIManager.Instance.messageWindow.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        UIManager.Instance.messageWindow.gameObject.SetActive(false);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Jjinbbang
   - JjinbbangSight
   - Hamster
+  - JjinbbangActivity
   layers:
   - Default
   - TransparentFX
