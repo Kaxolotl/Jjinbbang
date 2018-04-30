@@ -18,11 +18,13 @@ public class Hamster : MonoBehaviour
     float _moveSpeed;
     bool _byRelativePos;
     bool _byJjinbbang;
+    bool _friend;
 
     void Initialize()
     {
         _moveSpeed = Random.Range(2.5f, 3f);
         _byJjinbbang = false;
+        _friend = false;
         _rigid.constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
@@ -82,14 +84,15 @@ public class Hamster : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
+        // Space bar 누르면 켜지는 찐빵 콜라이더에 닿으면
         if (other.tag.Equals("JjinbbangActivity"))
         {
-            // 찐빵상호작용콜라이더에 닿으면(Space bar 누르면) Freeze해제
-            _rigid.constraints = RigidbodyConstraints2D.None;
-            _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-            // 찐빵에게 합류하는 상호작용 코루틴
-            StartCoroutine(BeFriend());
+            // 동료가 아니라면
+            if (!_friend)
+            {
+                // 찐빵에게 합류하는 상호작용 코루틴 실행
+                StartCoroutine(BeFriend());
+            }
         }
     }
 
@@ -101,10 +104,16 @@ public class Hamster : MonoBehaviour
         }
     }
 
-
+    // 찐빵에게 합류하는 상호작용 코루틴
     IEnumerator BeFriend()
     {
+        yield return new WaitForSeconds(0.1f);
+        // Freeze 해제
+        _rigid.constraints = RigidbodyConstraints2D.None;
+        _rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
+
         // messageWindow 3초 생성, 내용 수정방법 생각해야됨
+        _friend = true;
         UIManager.Instance.messageWindow.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
         UIManager.Instance.messageWindow.gameObject.SetActive(false);
