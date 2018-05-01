@@ -38,39 +38,46 @@ public class Hamster : MonoBehaviour
         Initialize();
         InvokeRepeating("Move", 0, 0.1f);
     }
+
     void Move()
-    {
-        // 찐빵이 범위 밖이면 
-        if (!_byJjinbbang)
+    {   
+        // 찐빵이 동료라면
+        if (_friend)
         {
-            // 플레이어와의 벡터 구함
-            jjinbbangPos = jjinbbang.transform.position - transform.position;
-            // 목표는 그 벡터에 랜덤 값을 더한 것
-            relativePos = new Vector2(jjinbbangPos.x + Random.Range(-1, 1), jjinbbangPos.y + Random.Range(-1, 1));
-            // 이동
-            _rigid.velocity = relativePos.normalized * _moveSpeed;
-        }
+            // 찐빵이 범위 밖이면 
+            if (!_byJjinbbang)
+            {
+                // 플레이어와의 벡터 구함
+                jjinbbangPos = jjinbbang.transform.position - transform.position;
+                // 목표는 그 벡터에 랜덤 값을 더한 것
+                relativePos = new Vector2(jjinbbangPos.x + Random.Range(-1, 1), jjinbbangPos.y + Random.Range(-1, 1));
+                // 이동
+                _rigid.velocity = relativePos.normalized * _moveSpeed;
+            }
 
-        // rigid.velocity.x 값에 따라 좌우반전
-        if (_rigid.velocity.x > 0)
-            _anim.sprite.flipX = true;
-        else if (_rigid.velocity.x < 0)
-            _anim.sprite.flipX = false;
 
-        // 목표와 거리가 가까우면 속도를 줄임
-        if (relativePos.x - gameObject.transform.position.x <= 0.1f ||
-            relativePos.y - gameObject.transform.position.y <= 0.1f)
-        {
-            _rigid.velocity *= 0.9f;
-        }
+            // rigid.velocity.x 값에 따라 좌우반전
+            if (_rigid.velocity.x > 0)
+                _anim.sprite.flipX = true;
+            else if (_rigid.velocity.x < 0)
+                _anim.sprite.flipX = false;
 
-        // 속도값이 0이 아니면 walking
-        if (_rigid.velocity.x == 0 && _rigid.velocity.y == 0)
-        {
-            _anim.animator.SetBool("walking", false);
+
+            // 목표와 거리가 가까우면 속도를 줄임
+            if (relativePos.x - gameObject.transform.position.x <= 0.1f ||
+                relativePos.y - gameObject.transform.position.y <= 0.1f)
+            {
+                _rigid.velocity *= 0.9f;
+            }
+
+            // 속도값이 0이 아니면 walking
+            if (_rigid.velocity.x == 0 && _rigid.velocity.y == 0)
+            {
+                _anim.animator.SetBool("walking", false);
+            }
+            else
+                _anim.animator.SetBool("walking", true);
         }
-        else
-            _anim.animator.SetBool("walking", true);
     }
 
     void OnTriggerEnter2D(Collider2D other)
