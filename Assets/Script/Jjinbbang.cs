@@ -18,6 +18,9 @@ public class Jjinbbang : MonoBehaviour
     Rigidbody2D _rigid;
     Vector2 _moveInput;
 
+    GameObject _ActObject;
+    Hamster _hamster;
+
     void Initialize()
     {
         moveSpeed = 2f;
@@ -68,8 +71,32 @@ public class Jjinbbang : MonoBehaviour
         // 스페이스바 상호작용
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(Activity());
+            if (_ActObject == null)
+            {
+                Debug.Log("_ActObject null");
+                return;
+            }
+            else if (_ActObject.tag == "Hamster")
+            {
+                _hamster = _ActObject.GetComponent<Hamster>();
+                _hamster.BeFriend();
+                _hamster = null;
+            }
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Hamster")
+        {
+            _ActObject = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "Hamster")
+            _ActObject = null;
     }
 
     IEnumerator Activity()
